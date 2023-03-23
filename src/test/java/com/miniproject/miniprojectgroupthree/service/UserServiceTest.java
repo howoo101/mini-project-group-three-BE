@@ -29,11 +29,11 @@ class UserServiceTest {
     void join() {
         String userName = "user1";
         String password = "1234";
-        UserEntity entity = UserEntityFixture.get(userName, password);
+        UserEntity fixtureEntity = UserEntityFixture.get(userName, password);
         when(repository.findByUserName(userName))
                 .thenReturn(Optional.empty());
         when(repository.save(any()))
-                .thenReturn(Optional.of(entity));
+                .thenReturn(fixtureEntity);
 
         assertDoesNotThrow(() -> userService.join(userName,password));
     }
@@ -43,11 +43,12 @@ class UserServiceTest {
     void join_exists() {
         String userName = "user1";
         String password = "1234";
-        UserEntity entity = UserEntityFixture.get(userName, password);
+        UserEntity fixtureEntity = UserEntityFixture.get(userName, password);
+
         when(repository.findByUserName(userName))
-                .thenReturn(Optional.empty());
+                .thenReturn(Optional.of(fixtureEntity));
         when(repository.save(any()))
-                .thenReturn(Optional.of(entity));
+                .thenReturn(fixtureEntity);
 
         Assertions.assertThrows(AppException.class, () -> userService.join(userName, password));
     }
